@@ -18,6 +18,11 @@ public class KhuyenMai {
     @Column(name = "MaKhuyenMai")
     private Integer maKhuyenMai;
     
+    @NotNull(message = "Cửa hàng không được để trống")
+    @ManyToOne
+    @JoinColumn(name = "MaCuaHang", nullable = false)
+    private CuaHang cuaHang;
+    
     @NotBlank(message = "Mã giảm giá không được để trống")
     @Size(min = 3, max = 50, message = "Mã giảm giá phải từ 3 đến 50 ký tự")
     @Column(name = "MaGiamGia", nullable = false, columnDefinition = "VARCHAR(50)")
@@ -45,8 +50,4 @@ public class KhuyenMai {
     @Min(value = 0, message = "Số lượng mã giảm giá không được âm")
     @Column(name = "SoLuongMaGiamGia")
     private Integer soLuongMaGiamGia;
-    
-    @ManyToOne
-    @JoinColumn(name = "MaNguoiDung")
-    private NguoiDung nguoiDung;
 }

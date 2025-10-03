@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @Builder
 public class SearchFilterModel {
     private String keyword;
+    private Integer maCuaHang;
     private Integer maDanhMuc;
     private BigDecimal minPrice;
     private BigDecimal maxPrice;

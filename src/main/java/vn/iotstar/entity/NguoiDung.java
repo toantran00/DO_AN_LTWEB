@@ -49,6 +49,9 @@ public class NguoiDung {
     private String trangThai = "Hoạt động";
     
     @OneToMany(mappedBy = "nguoiDung", cascade = CascadeType.ALL)
+    private List<CuaHang> cuaHangs;
+    
+    @OneToMany(mappedBy = "nguoiDung", cascade = CascadeType.ALL)
     private List<GioHang> gioHangs;
     
     @OneToMany(mappedBy = "nguoiDung", cascade = CascadeType.ALL)
@@ -56,7 +59,4 @@ public class NguoiDung {
     
     @OneToMany(mappedBy = "nguoiDung", cascade = CascadeType.ALL)
     private List<DanhGia> danhGias;
-    
-    @OneToMany(mappedBy = "nguoiDung", cascade = CascadeType.ALL)
-    private List<KhuyenMai> khuyenMais;
 }

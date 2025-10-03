@@ -12,6 +12,9 @@ import java.util.Date;
 public class KhuyenMaiModel {
     private Integer maKhuyenMai;
     
+    @NotNull(message = "Cửa hàng không được để trống")
+    private Integer maCuaHang;
+    
     @NotBlank(message = "Mã giảm giá không được để trống")
     @Size(min = 3, max = 50, message = "Mã giảm giá phải từ 3 đến 50 ký tự")
     private String maGiamGia;
@@ -33,9 +36,8 @@ public class KhuyenMaiModel {
     @Min(value = 0, message = "Số lượng mã giảm giá không được âm")
     private Integer soLuongMaGiamGia;
     
-    private Integer maNguoiDung;
-    
     // For response
-    private String tenNguoiDung;
+    private String tenCuaHang;
+    private String tenChuCuaHang;
     private String trangThai; // ACTIVE, EXPIRED, etc.
 }

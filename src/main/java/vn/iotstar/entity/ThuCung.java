@@ -15,7 +15,6 @@ public class ThuCung {
     @Column(name = "MaSanPham")
     private Integer maSanPham;
     
-    @NotNull(message = "Sản phẩm không được để trống")
     @OneToOne
     @JoinColumn(name = "MaSanPham", referencedColumnName = "MaSanPham")
     @MapsId

@@ -4,6 +4,7 @@ import lombok.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Table(name = "DanhMuc")
@@ -21,4 +22,7 @@ public class DanhMuc {
     @Size(min = 2, max = 100, message = "Tên danh mục phải từ 2 đến 100 ký tự")
     @Column(name = "TenDanhMuc", nullable = false, columnDefinition = "NVARCHAR(100)")
     private String tenDanhMuc;
+    
+    @OneToMany(mappedBy = "danhMuc", cascade = CascadeType.ALL)
+    private List<SanPham> sanPhams;
 }

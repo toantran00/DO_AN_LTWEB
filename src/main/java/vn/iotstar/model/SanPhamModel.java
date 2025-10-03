@@ -12,6 +12,9 @@ import java.util.Date;
 public class SanPhamModel {
     private Integer maSanPham;
     
+    @NotNull(message = "Cửa hàng không được để trống")
+    private Integer maCuaHang;
+    
     @NotNull(message = "Danh mục không được để trống")
     private Integer maDanhMuc;
     
@@ -21,6 +24,10 @@ public class SanPhamModel {
     
     @Size(max = 2000, message = "Mô tả sản phẩm không được quá 2000 ký tự")
     private String moTaSanPham;
+    
+    @NotNull(message = "Lượt thích không được để trống")
+    @DecimalMin(value = "0", message = "Lượt thích không được âm")
+    private BigDecimal luotThich;
     
     @NotNull(message = "Giá bán không được để trống")
     @DecimalMin(value = "0.0", inclusive = false, message = "Giá bán phải lớn hơn 0")
@@ -39,10 +46,7 @@ public class SanPhamModel {
     
     private Boolean trangThai;
     
-    @NotNull(message = "Lượt thích không được để trống")
-    @DecimalMin(value = "0", message = "Lượt thích không được âm")
-    private BigDecimal luotThich;
-    
     // For response
     private String tenDanhMuc;
+    private String tenCuaHang;
 }

@@ -19,6 +19,11 @@ public class SanPham {
     @Column(name = "MaSanPham")
     private Integer maSanPham;
     
+    @NotNull(message = "Cửa hàng không được để trống")
+    @ManyToOne
+    @JoinColumn(name = "MaCuaHang", nullable = false)
+    private CuaHang cuaHang;
+    
     @NotNull(message = "Danh mục không được để trống")
     @ManyToOne
     @JoinColumn(name = "MaDanhMuc", nullable = false)
@@ -32,6 +37,12 @@ public class SanPham {
     @Size(max = 2000, message = "Mô tả sản phẩm không được quá 2000 ký tự")
     @Column(name = "MoTaSanPham", columnDefinition = "NVARCHAR(MAX)")
     private String moTaSanPham;
+    
+    @NotNull(message = "Lượt thích không được để trống")
+    @DecimalMin(value = "0", message = "Lượt thích không được âm")
+    @Column(name = "LuotThich", precision = 18, scale = 0)
+    @Builder.Default
+    private BigDecimal luotThich = BigDecimal.ZERO;
     
     @NotNull(message = "Giá bán không được để trống")
     @DecimalMin(value = "0.0", inclusive = false, message = "Giá bán phải lớn hơn 0")
@@ -59,11 +70,8 @@ public class SanPham {
     @Builder.Default
     private Boolean trangThai = true;
     
-    @NotNull(message = "Lượt thích không được để trống")
-    @DecimalMin(value = "0", message = "Lượt thích không được âm")
-    @Column(name = "LuotThich", precision = 18, scale = 0)
-    @Builder.Default
-    private BigDecimal luotThich = BigDecimal.ZERO;
+    @OneToOne(mappedBy = "sanPham", cascade = CascadeType.ALL)
+    private ThuCung thuCung;
     
     @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL)
     private List<MatHang> matHangs;
