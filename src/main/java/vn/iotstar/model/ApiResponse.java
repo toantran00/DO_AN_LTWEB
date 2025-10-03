@@ -1,6 +1,7 @@
 package vn.iotstar.model;
 
 import lombok.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -10,6 +11,7 @@ public class ApiResponse<T> {
     private boolean success;
     private String message;
     private T data;
+    private List<String> errors;
     
     public static <T> ApiResponse<T> success(T data) {
         return ApiResponse.<T>builder()
@@ -23,7 +25,14 @@ public class ApiResponse<T> {
         return ApiResponse.<T>builder()
                 .success(false)
                 .message(message)
-                .data(null)
+                .build();
+    }
+    
+    public static <T> ApiResponse<T> error(String message, List<String> errors) {
+        return ApiResponse.<T>builder()
+                .success(false)
+                .message(message)
+                .errors(errors)
                 .build();
     }
 }

@@ -1,7 +1,8 @@
 package vn.iotstar.model;
 
 import lombok.*;
-import java.math.BigDecimal;
+import jakarta.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -10,21 +11,13 @@ import java.util.List;
 @Builder
 public class GioHangModel {
     private Integer maGioHang;
+    
+    @NotNull(message = "Người dùng không được để trống")
     private Integer maNguoiDung;
+    
+    private Date ngayTao;
+    
+    // For response
     private String tenNguoiDung;
-    private List<GioHangItem> items;
-    private BigDecimal tongTien;
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class GioHangItem {
-        private Integer maSanPham;
-        private String tenSanPham;
-        private BigDecimal giaBan;
-        private Integer soLuong;
-        private String hinhAnh;
-        private BigDecimal thanhTien;
-    }
+    private List<MatHangModel> matHangs;
 }

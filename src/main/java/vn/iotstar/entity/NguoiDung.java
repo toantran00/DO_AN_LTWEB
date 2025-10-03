@@ -1,9 +1,8 @@
 package vn.iotstar.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.ArrayList;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.util.List;
 
 @Entity
@@ -17,39 +16,47 @@ public class NguoiDung {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MaNguoiDung")
     private Integer maNguoiDung;
-
-    @Column(name = "TenNguoiDung", length = 100)
+    
+    @NotBlank(message = "Tên người dùng không được để trống")
+    @Size(min = 2, max = 100, message = "Tên người dùng phải từ 2 đến 100 ký tự")
+    @Column(name = "TenNguoiDung", nullable = false, columnDefinition = "NVARCHAR(100)")
     private String tenNguoiDung;
-
-    @Column(name = "Email", unique = true, length = 100)
+    
+    @NotBlank(message = "Email không được để trống")
+    @Email(message = "Email không đúng định dạng")
+    @Column(name = "Email", nullable = false, unique = true, columnDefinition = "NVARCHAR(100)")
     private String email;
-
-    @Column(name = "MatKhau", length = 255)
+    
+    @NotBlank(message = "Mật khẩu không được để trống")
+    @Size(min = 6, message = "Mật khẩu phải có ít nhất 6 ký tự")
+    @Column(name = "MatKhau", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String matKhau;
-
-    @Column(name = "SDT", length = 20)
+    
+    @Pattern(regexp = "^(|\\+?[0-9]{10,15})$", message = "Số điện thoại không đúng định dạng")
+    @Column(name = "SDT", columnDefinition = "VARCHAR(20)")
     private String sdt;
-
-    @Column(name = "DiaChi", length = 255)
+    
+    @Column(name = "DiaChi", columnDefinition = "NVARCHAR(255)")
     private String diaChi;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "MaVaiTro", length = 50)
-    private VaiTro.MaVaiTro maVaiTro;
-
-    @OneToMany(mappedBy = "nguoiDung", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    
+    @NotNull(message = "Vai trò không được để trống")
+    @ManyToOne
+    @JoinColumn(name = "MaVaiTro", nullable = false)
+    private VaiTro vaiTro;
+    
+    @Column(name = "TrangThai", columnDefinition = "NVARCHAR(20)")
     @Builder.Default
-    private List<GioHang> gioHangs = new ArrayList<>();
-
-    @OneToMany(mappedBy = "nguoiDung", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @Builder.Default
-    private List<DatHang> datHangs = new ArrayList<>();
-
-    @OneToMany(mappedBy = "nguoiDung", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @Builder.Default
-    private List<DanhGia> danhGias = new ArrayList<>();
-
-    @OneToMany(mappedBy = "nguoiDung", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @Builder.Default
-    private List<KhuyenMai> khuyenMais = new ArrayList<>();
+    private String trangThai = "Hoạt động";
+    
+    @OneToMany(mappedBy = "nguoiDung", cascade = CascadeType.ALL)
+    private List<GioHang> gioHangs;
+    
+    @OneToMany(mappedBy = "nguoiDung", cascade = CascadeType.ALL)
+    private List<DatHang> datHangs;
+    
+    @OneToMany(mappedBy = "nguoiDung", cascade = CascadeType.ALL)
+    private List<DanhGia> danhGias;
+    
+    @OneToMany(mappedBy = "nguoiDung", cascade = CascadeType.ALL)
+    private List<KhuyenMai> khuyenMais;
 }

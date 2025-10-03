@@ -1,8 +1,9 @@
 package vn.iotstar.model;
 
 import lombok.*;
+import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -10,10 +11,31 @@ import java.time.LocalDateTime;
 @Builder
 public class KhuyenMaiModel {
     private Integer maKhuyenMai;
+    
+    @NotBlank(message = "Mã giảm giá không được để trống")
+    @Size(min = 3, max = 50, message = "Mã giảm giá phải từ 3 đến 50 ký tự")
     private String maGiamGia;
+    
+    @NotNull(message = "Discount không được để trống")
+    @DecimalMin(value = "0.0", message = "Discount không được âm")
+    @DecimalMax(value = "100.0", message = "Discount không được vượt quá 100")
     private BigDecimal discount;
-    private LocalDateTime ngayBatDau;
-    private LocalDateTime ngayKetThuc;
-    private Integer soLuongMa;
-    private Boolean conHieuLuc;
+    
+    @NotNull(message = "Ngày bắt đầu không được để trống")
+    @FutureOrPresent(message = "Ngày bắt đầu phải là hiện tại hoặc tương lai")
+    private Date ngayBatDau;
+    
+    @NotNull(message = "Ngày kết thúc không được để trống")
+    @Future(message = "Ngày kết thúc phải là tương lai")
+    private Date ngayKetThuc;
+    
+    @NotNull(message = "Số lượng mã giảm giá không được để trống")
+    @Min(value = 0, message = "Số lượng mã giảm giá không được âm")
+    private Integer soLuongMaGiamGia;
+    
+    private Integer maNguoiDung;
+    
+    // For response
+    private String tenNguoiDung;
+    private String trangThai; // ACTIVE, EXPIRED, etc.
 }

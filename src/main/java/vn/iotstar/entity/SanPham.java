@@ -1,11 +1,10 @@
 package vn.iotstar.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
-
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -19,47 +18,59 @@ public class SanPham {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MaSanPham")
     private Integer maSanPham;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    
+    @NotNull(message = "Danh mục không được để trống")
+    @ManyToOne
     @JoinColumn(name = "MaDanhMuc", nullable = false)
     private DanhMuc danhMuc;
-
-    @Column(name = "TenSanPham", nullable = false, length = 255)
+    
+    @NotBlank(message = "Tên sản phẩm không được để trống")
+    @Size(min = 2, max = 255, message = "Tên sản phẩm phải từ 2 đến 255 ký tự")
+    @Column(name = "TenSanPham", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String tenSanPham;
-
+    
+    @Size(max = 2000, message = "Mô tả sản phẩm không được quá 2000 ký tự")
     @Column(name = "MoTaSanPham", columnDefinition = "NVARCHAR(MAX)")
     private String moTaSanPham;
-
-    @Column(name = "GiaBan", nullable = false, precision = 18, scale = 2)
+    
+    @NotNull(message = "Giá bán không được để trống")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Giá bán phải lớn hơn 0")
+    @Column(name = "GiaBan", precision = 18, scale = 2)
     private BigDecimal giaBan;
-
-    @Column(name = "SoLuongConLai", nullable = false)
-    private Integer soLuongConLai;
-
+    
+    @NotNull(message = "Số lượng không được để trống")
+    @Min(value = 0, message = "Số lượng không được âm")
+    @Column(name = "SoLuongConLai")
+    @Builder.Default
+    private Integer soLuongConLai = 0;
+    
+    @Temporal(TemporalType.DATE)
     @Column(name = "NgayNhap")
-    private LocalDate ngayNhap;
-
-    @Column(name = "HinhAnh", length = 255)
+    private Date ngayNhap;
+    
+    @Column(name = "HinhAnh", columnDefinition = "NVARCHAR(255)")
     private String hinhAnh;
-
-    @Column(name = "LoaiSanPham", length = 255)
+    
+    @NotBlank(message = "Loại sản phẩm không được để trống")
+    @Column(name = "LoaiSanPham", columnDefinition = "NVARCHAR(255)")
     private String loaiSanPham;
-
+    
     @Column(name = "TrangThai")
-    private Boolean trangThai;
-
-    @OneToOne(mappedBy = "sanPham", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private ThuCung thuCung;
-
-    @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
-    private List<MatHang> matHangs = new ArrayList<>();
-
-    @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Boolean trangThai = true;
+    
+    @NotNull(message = "Lượt thích không được để trống")
+    @DecimalMin(value = "0", message = "Lượt thích không được âm")
+    @Column(name = "LuotThich", precision = 18, scale = 0)
     @Builder.Default
-    private List<DatHangChiTiet> datHangChiTiets = new ArrayList<>();
-
-    @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @Builder.Default
-    private List<DanhGia> danhGias = new ArrayList<>();
+    private BigDecimal luotThich = BigDecimal.ZERO;
+    
+    @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL)
+    private List<MatHang> matHangs;
+    
+    @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL)
+    private List<DatHangChiTiet> datHangChiTiets;
+    
+    @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL)
+    private List<DanhGia> danhGias;
 }

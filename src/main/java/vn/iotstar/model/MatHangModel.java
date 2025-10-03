@@ -1,33 +1,31 @@
-package vn.iotstar.entity;
+package vn.iotstar.model;
 
 import lombok.*;
-import jakarta.persistence.*;
+
+import java.math.BigDecimal;
+
 import jakarta.validation.constraints.*;
 
-@Entity
-@Table(name = "MatHang")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MatHang {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MaMatHang")
+public class MatHangModel {
     private Integer maMatHang;
     
     @NotNull(message = "Giỏ hàng không được để trống")
-    @ManyToOne
-    @JoinColumn(name = "MaGioHang", nullable = false)
-    private GioHang gioHang;
+    private Integer maGioHang;
     
     @NotNull(message = "Sản phẩm không được để trống")
-    @ManyToOne
-    @JoinColumn(name = "MaSanPham", nullable = false)
-    private SanPham sanPham;
+    private Integer maSanPham;
     
     @NotNull(message = "Số lượng đặt không được để trống")
     @Min(value = 1, message = "Số lượng đặt phải lớn hơn 0")
-    @Column(name = "SoLuongDat", nullable = false)
     private Integer soLuongDat;
+    
+
+    private String tenSanPham;
+    private BigDecimal giaBan;
+    private String hinhAnh;
+    private BigDecimal thanhTien;
 }

@@ -1,11 +1,10 @@
 package vn.iotstar.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
-
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -19,34 +18,33 @@ public class DatHang {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MaDatHang")
     private Integer maDatHang;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MaNguoiDung")
+    
+    @NotNull(message = "Người dùng không được để trống")
+    @ManyToOne
+    @JoinColumn(name = "MaNguoiDung", nullable = false)
     private NguoiDung nguoiDung;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MaNguoiGiaoHang")
-    private NguoiGiaoHang nguoiGiaoHang;
-
+    
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "NgayDat")
-    private LocalDateTime ngayDat;
-
+    @Builder.Default
+    private Date ngayDat = new Date();
+    
+    @NotNull(message = "Tổng tiền không được để trống")
+    @DecimalMin(value = "0.0", message = "Tổng tiền không được âm")
     @Column(name = "TongTien", precision = 18, scale = 2)
     private BigDecimal tongTien;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "TrangThai", length = 50)
-    private TrangThaiDonHang trangThai;
-
-    @OneToMany(mappedBy = "datHang", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    
+    @NotBlank(message = "Trạng thái không được để trống")
+    @Column(name = "TrangThai", columnDefinition = "NVARCHAR(50)")
     @Builder.Default
-    private List<DatHangChiTiet> datHangChiTiets = new ArrayList<>();
-
-    @OneToMany(mappedBy = "datHang", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @Builder.Default
-    private List<ThanhToan> thanhToans = new ArrayList<>();
-
-    public enum TrangThaiDonHang {
-        New, Confirmed, Delivered, Cancelled, Refunded
-    }
+    private String trangThai = "New";
+    
+    @OneToMany(mappedBy = "datHang", cascade = CascadeType.ALL)
+    private List<DatHangChiTiet> datHangChiTiets;
+    
+    @OneToMany(mappedBy = "datHang", cascade = CascadeType.ALL)
+    private List<VanChuyen> vanChuyens;
+    
+    @OneToMany(mappedBy = "datHang", cascade = CascadeType.ALL)
+    private List<ThanhToan> thanhToans;
 }

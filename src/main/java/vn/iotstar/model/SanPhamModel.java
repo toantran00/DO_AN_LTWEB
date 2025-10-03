@@ -1,10 +1,9 @@
 package vn.iotstar.model;
 
 import lombok.*;
+import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -12,19 +11,38 @@ import java.util.List;
 @Builder
 public class SanPhamModel {
     private Integer maSanPham;
-    private String tenSanPham;
-    private String moTa;
-    private BigDecimal giaBan;
-    private Integer soLuongConLai;
-    private String hinhAnh;
-    private Boolean trangThai;
-    private String tenDanhMuc;
-    private Integer maDanhMuc;
-    private String loaiSanPham;
-    private LocalDate ngayNhap;
     
-    // Thuộc tính cho thú cưng
-    private String gioiTinh;
-    private Integer doTuoi;
-    private String sucKhoe;
+    @NotNull(message = "Danh mục không được để trống")
+    private Integer maDanhMuc;
+    
+    @NotBlank(message = "Tên sản phẩm không được để trống")
+    @Size(min = 2, max = 255, message = "Tên sản phẩm phải từ 2 đến 255 ký tự")
+    private String tenSanPham;
+    
+    @Size(max = 2000, message = "Mô tả sản phẩm không được quá 2000 ký tự")
+    private String moTaSanPham;
+    
+    @NotNull(message = "Giá bán không được để trống")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Giá bán phải lớn hơn 0")
+    private BigDecimal giaBan;
+    
+    @NotNull(message = "Số lượng không được để trống")
+    @Min(value = 0, message = "Số lượng không được âm")
+    private Integer soLuongConLai;
+    
+    private Date ngayNhap;
+    
+    private String hinhAnh;
+    
+    @NotBlank(message = "Loại sản phẩm không được để trống")
+    private String loaiSanPham;
+    
+    private Boolean trangThai;
+    
+    @NotNull(message = "Lượt thích không được để trống")
+    @DecimalMin(value = "0", message = "Lượt thích không được âm")
+    private BigDecimal luotThich;
+    
+    // For response
+    private String tenDanhMuc;
 }

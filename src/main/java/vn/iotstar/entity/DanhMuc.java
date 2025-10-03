@@ -1,10 +1,9 @@
 package vn.iotstar.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "DanhMuc")
@@ -17,11 +16,9 @@ public class DanhMuc {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MaDanhMuc")
     private Integer maDanhMuc;
-
-    @Column(name = "TenDanhMuc", nullable = false, length = 100)
+    
+    @NotBlank(message = "Tên danh mục không được để trống")
+    @Size(min = 2, max = 100, message = "Tên danh mục phải từ 2 đến 100 ký tự")
+    @Column(name = "TenDanhMuc", nullable = false, columnDefinition = "NVARCHAR(100)")
     private String tenDanhMuc;
-
-    @OneToMany(mappedBy = "danhMuc", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @Builder.Default
-    private List<SanPham> sanPhams = new ArrayList<>();
 }

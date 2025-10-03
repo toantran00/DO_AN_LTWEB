@@ -1,10 +1,9 @@
 package vn.iotstar.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -18,15 +17,17 @@ public class GioHang {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MaGioHang")
     private Integer maGioHang;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MaNguoiDung")
+    
+    @NotNull(message = "Người dùng không được để trống")
+    @ManyToOne
+    @JoinColumn(name = "MaNguoiDung", nullable = false)
     private NguoiDung nguoiDung;
-
+    
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "NgayTao")
-    private LocalDateTime ngayTao;
-
-    @OneToMany(mappedBy = "gioHang", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
-    private List<MatHang> matHangs = new ArrayList<>();
+    private Date ngayTao = new Date();
+    
+    @OneToMany(mappedBy = "gioHang", cascade = CascadeType.ALL)
+    private List<MatHang> matHangs;
 }

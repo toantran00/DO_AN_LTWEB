@@ -1,7 +1,8 @@
 package vn.iotstar.model;
 
 import lombok.*;
-import java.time.LocalDateTime;
+import jakarta.validation.constraints.*;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -9,11 +10,28 @@ import java.time.LocalDateTime;
 @Builder
 public class DanhGiaModel {
     private Integer maDanhGia;
+    
+    @NotNull(message = "Sản phẩm không được để trống")
     private Integer maSanPham;
-    private String tenSanPham;
+    
+    @NotNull(message = "Người dùng không được để trống")
     private Integer maNguoiDung;
-    private String tenNguoiDung;
+    
+    @NotNull(message = "Số sao không được để trống")
+    @Min(value = 1, message = "Số sao phải từ 1 đến 5")
+    @Max(value = 5, message = "Số sao phải từ 1 đến 5")
     private Integer soSao;
+    
+    @NotBlank(message = "Bình luận không được để trống")
+    @Size(min = 10, max = 1000, message = "Bình luận phải từ 10 đến 1000 ký tự")
     private String binhLuan;
-    private LocalDateTime ngayDanhGia;
+    
+    private Date ngayDanhGia;
+    
+    private String anhVideo;
+    
+    // For response
+    private String tenSanPham;
+    private String tenNguoiDung;
+    private String hinhAnhSanPham;
 }
